@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const notesRoutes = require('./routes/notesRoutes')
 const errorHandler = require('./middleware/errorHandler');
 const { getPool } = require('./config/database');
 
@@ -32,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api/notes', notesRoutes);
 // Error handler (must be last)
 app.use(errorHandler);
 

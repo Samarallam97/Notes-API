@@ -8,7 +8,7 @@ const config = {
   database: process.env.DB_DATABASE,
   port: parseInt(process.env.DB_PORT || '1433'),
   options: {
-    encrypt: true, 
+    encrypt: false, 
     trustServerCertificate: true,// for local development
   },
   pool: {
