@@ -22,6 +22,12 @@ const errorHandler = (err, req, res, next) => {
     }
   }
 
+  // Joi validation errors
+  if (err.isJoi) {
+    statusCode = 400;
+    message = err.details[0].message;
+  }
+  
   res.status(statusCode).json({
     success: false,
     error: message,
