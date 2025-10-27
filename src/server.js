@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 
 require('dotenv').config();
 
@@ -11,7 +9,6 @@ const v1Routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
 const { generalLimiter, authLimiter } = require('./middleware/rateLimiter');
 const { getPool } = require('./config/database');
-const swaggerSpec = require('./config/swagger');
 const { setupNoteSocket } = require('./sockets/noteSocket');
 const { initializeScheduler } = require('./jobs/scheduler');
 
@@ -53,48 +50,7 @@ app.get('/', (req, res) => {
     success: true,
     message: 'API Documentation',
     baseURL: `http://localhost:${process.env.PORT || 3000}/api`,
-    authentication: 'Bearer Token (JWT)',
-    endpoints: {
-      auth: {
-        register: 'POST /auth/register',
-        login: 'POST /auth/login',
-        getProfile: 'GET /auth/me'
-      },
-      notes: {
-        getAll: 'GET /notes?page=1&limit=10&search=keyword&category_id=1&is_pinned=true&sort=title&order=asc',
-        getOne: 'GET /notes/:id',
-        create: 'POST /notes',
-        update: 'PUT /notes/:id',
-        delete: 'DELETE /notes/:id',
-        getTags: 'GET /notes/tags',
-        getStats: 'GET /notes/stats'
-      },
-      categories: {
-        getAll: 'GET /categories',
-        create: 'POST /categories',
-        update: 'PUT /categories/:id',
-        delete: 'DELETE /categories/:id'
-      }
-    },
-    queryParameters: {
-      pagination: {
-        page: 'Page number (default: 1)',
-        limit: 'Items per page (default: 10, max: 100)'
-      },
-      search: {
-        search: 'Search in title and content'
-      },
-      filtering: {
-        category_id: 'Filter by category ID',
-        is_pinned: 'Filter by pinned status (true/false)',
-        date_from: 'Filter from date (YYYY-MM-DD)',
-        date_to: 'Filter to date (YYYY-MM-DD)'
-      },
-      sorting: {
-        sort: 'Sort field (title, created_at, updated_at)',
-        order: 'Sort order (asc, desc)'
-      }
-    }
+    authentication: 'Bearer Token (JWT)'
   });
 });
 
