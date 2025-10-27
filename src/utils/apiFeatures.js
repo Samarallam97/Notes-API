@@ -1,30 +1,37 @@
-// *** Make sure to import 'sql' from your db config ***
 const { sql } = require('../config/database'); 
 
-/**
- * Helper class for pagination, search, and filtering.
- * This version uses an alias prefix to avoid ambiguous columns
- * and parameterized queries to prevent SQL injection.
- */
 class APIFeatures {
   constructor(query, queryString) {
-    this.alias = query; // This will be 'n' from your controller
-    this.aliasPrefix = this.alias ? `${this.alias}.` : ''; // Creates 'n.'
+    this.alias = query; 
+    this.aliasPrefix = this.alias ? `${this.alias}.` : ''; 
     this.queryString = queryString;
     
-    // Object to hold filter parameters safely
+    this.searchCondition = '';
+    this.searchParam = null;
+    this.filterCondition = '';
     this.filterParams = {};
+    this.sortSQL = ''; 
+    
+    this.pagination = {
+      sql: '',
+      page: 1,
+      limit: 10,
+      offset: 0
+    };
   }
 
-  /**
-   * Builds pagination SQL (OFFSET/FETCH)
-   */
   paginate() {
+    const defaultLimit = parseInt(process.env.DEFAULT_PAGE_SIZE) || 10;
+    const maxLimit = parseInt(process.env.MAX_PAGE_SIZE) || 50;
+
     const page = parseInt(this.queryString.page) || 1;
-    const limit = Math.min(
-      parseInt(this.queryString.limit) || parseInt(process.env.DEFAULT_PAGE_SIZE),
-      parseInt(process.env.MAX_PAGE_SIZE)
-    );
+    let limit = parseInt(this.queryString.limit) || defaultLimit;
+    
+    // Enforce the maximum page size
+    if (limit > maxLimit) {
+      limit = maxLimit;
+    }
+
     const offset = (page - 1) * limit;
 
     this.pagination = {
@@ -37,25 +44,16 @@ class APIFeatures {
     return this;
   }
 
-  /**
-   * Builds search SQL (LIKE)
-   */
   search() {
     if (this.queryString.search) {
       const searchTerm = this.queryString.search.trim();
-      // Add alias prefix to columns
+
       this.searchCondition = `AND (${this.aliasPrefix}title LIKE @search OR ${this.aliasPrefix}content LIKE @search)`;
       this.searchParam = `%${searchTerm}%`;
-    } else {
-      this.searchCondition = '';
-      this.searchParam = null;
     }
     return this;
   }
 
-  /**
-   * Builds filter SQL (AND conditions) using secure parameters
-   */
   filter() {
     const filters = [];
     
@@ -78,11 +76,11 @@ class APIFeatures {
       };
     }
 
-    // Filter by date range (NOW SECURE)
+    // Filter by date range
     if (this.queryString.date_from) {
       filters.push(`${this.aliasPrefix}created_at >= @filter_date_from`);
       this.filterParams.filter_date_from = { 
-        type: sql.DateTime, // Use sql.Date or sql.DateTime2 if more appropriate
+        type: sql.DateTime, 
         value: new Date(this.queryString.date_from) 
       };
     }
@@ -98,25 +96,19 @@ class APIFeatures {
     return this;
   }
 
-  /**
-   * Builds sorting SQL (ORDER BY)
-   */
   sort() {
     const sortBy = this.queryString.sort || 'updated_at';
     const order = this.queryString.order === 'asc' ? 'ASC' : 'DESC';
     
-    // Validate sort field to prevent SQL injection
+    // Validate sort field
     const allowedFields = ['title', 'created_at', 'updated_at'];
     const field = allowedFields.includes(sortBy) ? sortBy : 'updated_at';
     
-    // Add alias prefix
     this.sortSQL = `ORDER BY ${this.aliasPrefix}${field} ${order}`;
+    
     return this;
   }
 
-  /**
-   * Generates pagination metadata for the response
-   */
   getPaginationMeta(totalCount) {
     const { page, limit } = this.pagination;
     const totalPages = Math.ceil(totalCount / limit);

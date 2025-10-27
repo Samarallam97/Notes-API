@@ -1,55 +1,54 @@
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const socketIO = require('socket.io');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 require('dotenv').config();
 
-const authRoutes = require('./routes/authRoutes');
-const notesRoutes = require('./routes/notesRoutes');
-const categoriesRoutes = require('./routes/categoriesRoutes');
+const v1Routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
+const { generalLimiter, authLimiter } = require('./middleware/rateLimiter');
 const { getPool } = require('./config/database');
+const swaggerSpec = require('./config/swagger');
+const { setupNoteSocket } = require('./sockets/noteSocket');
+const { initializeScheduler } = require('./jobs/scheduler');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
+// Store io instance in app for access in controllers
+app.set('io', io);
+
+// Setup WebSocket
+setupNoteSocket(io);
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware
+// Apply rate limiting
+app.use('/api/', generalLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
+
+// Request logging
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
   next();
 });
 
-// Routes
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Notes API v2.0 - Advanced Features Edition',
-    version: '2.0.0',
-    documentation: '/api/docs',
-    endpoints: {
-      auth: '/api/auth',
-      notes: '/api/notes',
-      categories: '/api/categories'
-    },
-    features: [
-      'Search & Filtering',
-      'Pagination',
-      'Categories & Tags',
-      'Advanced Validation',
-      'Performance Optimization'
-    ]
-  });
-});
-
-// API routes
-app.use('/api/auth', authRoutes);
-app.use('/api/notes', notesRoutes);
-app.use('/api/categories', categoriesRoutes);
-
 // API Documentation endpoint
-app.get('/api/docs', (req, res) => {
+app.get('/', (req, res) => {
   res.json({
     success: true,
     message: 'API Documentation',
@@ -99,6 +98,18 @@ app.get('/api/docs', (req, res) => {
   });
 });
 
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({
+    success: true,
+    status: 'healthy',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.use('/api', v1Routes);
+
 // Error handler (must be last)
 app.use(errorHandler);
 
@@ -109,10 +120,17 @@ const startServer = async () => {
   try {
     await getPool();
     
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`📝 Environment: ${process.env.NODE_ENV}`);
-      console.log(`📚 API Documentation: http://localhost:${PORT}/api/docs`);
+     if (process.env.NODE_ENV !== 'test') {
+      initializeScheduler();
+    }
+
+    server.listen(PORT, () => {
+      console.log(`
+╔══════════════════════════════════════════════════════════════╗
+║       Server:        http://localhost:${PORT}                  
+║       Environment:   ${process.env.NODE_ENV || 'development'}                         ║
+╚══════════════════════════════════════════════════════════════╝
+      `);
     });
   } catch (err) {
     console.error('Failed to start server:', err);
