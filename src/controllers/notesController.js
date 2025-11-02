@@ -592,18 +592,23 @@ exports.updateNote = async (req, res, next) => {
    }
   }
 
-  // Add new attachments
-  if (req.files && req.files.length > 0) {
-   for (const file of req.files) {
-    await transaction.request()
-     .input('noteId', sql.Int, noteId)
-     .input('filePath', sql.NVarChar, file.path)
-     .query(`
-      INSERT INTO Attachments (note_id, filename, original_name, mime_type, size_bytes, file_path)
-      VALUES (@noteId, @filename, @originalName, @mimeType, @sizeBytes, @filePath)
-     `);
-   }
-  }
+  // Handle file attachments
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        await transaction
+          .request()
+          .input('noteId', sql.Int, updatedNote.id)
+          .input('filename', sql.NVarChar, file.filename)
+          .input('originalName', sql.NVarChar, file.originalname)
+          .input('mimeType', sql.NVarChar, file.mimetype)
+          .input('sizeBytes', sql.BigInt, file.size)
+          .input('filePath', sql.NVarChar, file.path)
+          .query(`
+            INSERT INTO Attachments (note_id, filename, original_name, mime_type, size_bytes, file_path)
+            VALUES (@noteId, @filename, @originalName, @mimeType, @sizeBytes, @filePath)
+          `);
+      }
+    }
 
   await transaction.commit();
     transactionBegun = false;

@@ -18,7 +18,7 @@ const auditLog = (action, entityType) => {
       userAgent: req.get('user-agent')
     };
 
-    // Override response methods to log after success
+    // log after success
     const logAudit = async (responseData) => {
       try {
         if (res.statusCode >= 200 && res.statusCode < 300) {

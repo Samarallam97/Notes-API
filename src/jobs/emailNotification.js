@@ -19,7 +19,7 @@ const sendNoteSharedEmail = async (recipientEmail, sharedBy, noteTitle) => {
     subject: 'A note has been shared with you',
     html: `
       <h2>Note Shared</h2>
-      <p><strong>${sharedBy}</strong> has shared a note with you:</p>
+      <p><strong>user with id :${sharedBy}</strong> has shared a note with you:</p>
       <p><strong>Title:</strong> ${noteTitle}</p>
       <p><a href="${process.env.API_BASE_URL}">View in Notes App</a></p>
     `

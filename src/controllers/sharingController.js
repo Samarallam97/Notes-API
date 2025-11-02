@@ -68,14 +68,16 @@ exports.shareNote = async (req, res, next) => {
       `);
 
     // Send email notification (background job)
-    sendNoteSharedEmail(recipient.email, req.user.username || req.user.email, note.title)
+    console.log(userId);
+    
+    sendNoteSharedEmail(recipient.email, userId || req.user.email, note.title)
       .catch(err => console.error('Email notification failed:', err));
 
     // Send real-time notification via WebSocket
     if (req.app.get('io')) {
       emitNotification(req.app.get('io'), recipient.id, {
         type: 'note_shared',
-        message: `${req.user.username} shared a note with you: ${note.title}`,
+        message: `user with id : ${userId} shared a note with you: ${note.title}`,
         noteId: noteId,
         timestamp: new Date()
       });

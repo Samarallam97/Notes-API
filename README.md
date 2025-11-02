@@ -18,7 +18,7 @@ notes-api/
 │   │   ├── notesController.js
 │   │   ├── categoriesController.js
 │   │   ├── sharingController.js
-│	│   ├── templatesController.js
+│	  │   ├── templatesController.js
 │   │   └── exportController.js
 │   │   
 │   │       
@@ -31,8 +31,8 @@ notes-api/
 │   │   ├── auditLog.js
 │   │   └── softDelete.js
 │   │
-│	│
-│	├── routes/
+│	  │
+│	  ├── routes/
 │   │   ├── index.js
 │   │   ├── reportsRoutes.js
 │   │   ├── authRoutes.js
@@ -48,15 +48,15 @@ notes-api/
 │   │   ├── fileUpload.js
 │   │   └── pdfGenerator.js
 │   │
-│	│
-│	├── jobs/
+│	  │
+│	  ├── jobs/
 │   │   ├── emailNotification.js
-│	│	├── reportGenerator.js
+│	  │	  ├── reportGenerator.js
 │   │   └── reportGenerator.js
-│	│	
+│	  │	
 │   │
-│	│
-│	├── sockets/
+│	  │
+│	  ├── sockets/
 │   │   └── noteSocket.js
 │   └── server.js
 │
@@ -315,43 +315,44 @@ KEY INDEX PK__Notes__3213E83F ON NotesFullTextCatalog;
 
 |Method|Endpoint|Description|Auth|
 |---|---|---|---|
-|POST|`/api/v1/auth/register`|Register user|No|
-|POST|`/api/v1/auth/login`|Login user|No|
-|GET|`/api/v1/auth/me`|Get profile|Yes|
-|GET|`/api/v1/notes`|List notes|Yes|
-|POST|`/api/v1/notes`|Create note|Yes|
-|GET|`/api/v1/notes/:id`|Get note|Yes|
-|PUT|`/api/v1/notes/:id`|Update note|Yes|
-|DELETE|`/api/v1/notes/:id`|Delete note|Yes|
-|GET|`/api/v1/notes/trash`|View trash|Yes|
-|POST|`/api/v1/notes/:id/restore`|Restore note|Yes|
-|DELETE|`/api/v1/notes/:id/permanent`|Permanent delete|Yes|
-|GET|`/api/v1/notes/stats`|Get statistics|Yes|
-|GET|`/api/v1/notes/tags`|List tags|Yes|
-|GET|`/api/v1/notes/:id/attachments`|List attachments|Yes|
-|GET|`/api/v1/notes/:id/attachments/:aid/download`|Download file|Yes|
-|DELETE|`/api/v1/notes/:id/attachments/:aid`|Delete attachment|Yes|
-|GET|`/api/v1/categories`|List categories|Yes|
-|POST|`/api/v1/categories`|Create category|Yes|
-|PUT|`/api/v1/categories/:id`|Update category|Yes|
-|DELETE|`/api/v1/categories/:id`|Delete category|Yes|
-|POST|`/api/v1/sharing/notes/:id/share`|Share note|Yes|
-|GET|`/api/v1/sharing/notes/:id/users`|List shared users|Yes|
-|GET|`/api/v1/sharing/shared-with-me`|Notes shared with me|Yes|
-|DELETE|`/api/v1/sharing/:shareId`|Revoke share|Yes|
-|GET|`/api/v1/templates`|List templates|Yes|
-|POST|`/api/v1/templates`|Create template|Yes|
-|POST|`/api/v1/templates/:id/use`|Use template|Yes|
-|DELETE|`/api/v1/templates/:id`|Delete template|Yes|
-|GET|`/api/v1/export/notes/:id/pdf`|Export note PDF|Yes|
-|GET|`/api/v1/export/notes/pdf`|Export all PDF|Yes|
-|GET|`/api/v1/export/notes/json`|Export JSON|Yes|
-|GET|`/api/v1/export/notes/csv`|Export CSV|Yes|
-|POST|`/api/v1/export/notes/import`|Import JSON|Yes|
+|POST|`/api/auth/register`|Register user|No|
+|POST|`/api/auth/login`|Login user|No|
+|GET|`/api/auth/me`|Get profile|Yes|
+|GET|`/api/notes`|List notes|Yes|
+|POST|`/api/notes`|Create note|Yes|
+|GET|`/api/notes/:id`|Get note|Yes|
+|PUT|`/api/notes/:id`|Update note|Yes|
+|DELETE|`/api/notes/:id`|Delete note|Yes|
+|GET|`/api/notes/trash`|View trash|Yes|
+|POST|`/api/notes/:id/restore`|Restore note|Yes|
+|DELETE|`/api/notes/:id/permanent`|Permanent delete|Yes|
+|GET|`/api/notes/stats`|Get statistics|Yes|
+|GET|`/api/notes/tags`|List tags|Yes|
+|GET|`/api/notes/:id/attachments`|List attachments|Yes|
+|GET|`/api/notes/:id/attachments/:aid/download`|Download file|Yes|
+|DELETE|`/api/notes/:id/attachments/:aid`|Delete attachment|Yes|
+|GET|`/api/categories`|List categories|Yes|
+|POST|`/api/categories`|Create category|Yes|
+|PUT|`/api/categories/:id`|Update category|Yes|
+|DELETE|`/api/categories/:id`|Delete category|Yes|
+|POST|`/api/sharing/notes/:id/share`|Share note|Yes|
+|GET|`/api/sharing/notes/:id/users`|List shared users|Yes|
+|GET|`/api/sharing/shared-with-me`|Notes shared with me|Yes|
+|DELETE|`/api/sharing/:shareId`|Revoke share|Yes|
+|GET|`/api/templates`|List templates|Yes|
+|POST|`/api/templates`|Create template|Yes|
+|POST|`/api/templates/:id/use`|Use template|Yes|
+|DELETE|`/api/templates/:id`|Delete template|Yes|
+|GET|`/api/export/notes/:id/pdf`|Export note PDF|Yes|
+|GET|`/api/export/notes/pdf`|Export all PDF|Yes|
+|GET|`/api/export/notes/json`|Export JSON|Yes|
+|GET|`/api/export/notes/csv`|Export CSV|Yes|
+|POST|`/api/export/notes/import`|Import JSON|Yes|
 |GET|`/health`|Health check|No|
 |GET|`/`|API info|No|
-|GET|`/api-docs`|Swagger docs|No|
-
+|GET|`/api/reports/weekly/:id`|Generate Weekly Report|Background Job| Admin Only|
+|GET|`/api/reports/monthly/:id`|Generate Monthly Report|Background Job| Admin Only|
+|GET|`/api/reports/audit?startDate=&endDate=`|Generate Audit Log Report|Admin Only|
 
 ## 6. Documentation
 
@@ -359,7 +360,7 @@ KEY INDEX PK__Notes__3213E83F ON NotesFullTextCatalog;
 
 ##### **1.1 Register New User**
 
-**Endpoint:** `POST /api/v1/auth/register`  
+**Endpoint:** `POST /api/auth/register`  
 **Authentication:** None (Public)  
 **Rate Limit:** 5 requests per 15 minutes
 
@@ -418,7 +419,7 @@ KEY INDEX PK__Notes__3213E83F ON NotesFullTextCatalog;
 
 ##### 1.2 Login User
 
-**Endpoint:** `POST /api/v1/auth/login`  
+**Endpoint:** `POST /api/auth/login`  
 **Authentication:** None (Public)  
 **Rate Limit:** 5 requests per 15 minutes
 
@@ -467,7 +468,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ###### 1.3 Get Current User Profile
 
-**Endpoint:** `GET /api/v1/auth/me`  
+**Endpoint:** `GET /api/auth/me`  
 **Authentication:** Required (Bearer Token)
 
 **Headers:**
@@ -501,7 +502,7 @@ Authorization: Bearer YOUR_TOKEN
 
 ###### 2.1. Get All Notes (with filters & pagination)
 
-**Endpoint:** `GET /api/v1/notes`  
+**Endpoint:** `GET /api/notes`  
 **Authentication:** Required  
 **Cache:** 60 seconds
 
@@ -524,28 +525,28 @@ Authorization: Bearer YOUR_TOKEN
 
 ```bash
 # Basic - Get first 10 notes
-GET /api/v1/notes
+GET /api/notes
 
 # With pagination
-GET /api/v1/notes?page=2&limit=20
+GET /api/notes?page=2&limit=20
 
 # Search notes
-GET /api/v1/notes?search=meeting
+GET /api/notes?search=meeting
 
 # Filter by category
-GET /api/v1/notes?category_id=1
+GET /api/notes?category_id=1
 
 # Filter pinned notes only
-GET /api/v1/notes?is_pinned=true
+GET /api/notes?is_pinned=true
 
 # Date range filter
-GET /api/v1/notes?date_from=2025-01-01&date_to=2025-01-31
+GET /api/notes?date_from=2025-01-01&date_to=2025-01-31
 
 # Sort by title ascending
-GET /api/v1/notes?sort=title&order=asc
+GET /api/notes?sort=title&order=asc
 
 # Combined filters
-GET /api/v1/notes?search=project&category_id=2&is_pinned=true&page=1&limit=10&sort=updated_at&order=desc
+GET /api/notes?search=project&category_id=2&is_pinned=true&page=1&limit=10&sort=updated_at&order=desc
 ```
 
 **Success Response (200):**
@@ -587,7 +588,7 @@ GET /api/v1/notes?search=project&category_id=2&is_pinned=true&page=1&limit=10&so
 
 ###### 2.2 Get Single Note
 
-**Endpoint:** `GET /api/v1/notes/:id`  
+**Endpoint:** `GET /api/notes/:id`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user
 
@@ -641,7 +642,7 @@ GET /api/v1/notes?search=project&category_id=2&is_pinned=true&page=1&limit=10&so
 
 ###### 2.3 Create Note (with attachments)
 
-**Endpoint:** `POST /api/v1/notes`  
+**Endpoint:** `POST /api/notes`  
 **Authentication:** Required  
 **Content-Type:** `multipart/form-data` (for file uploads)
 
@@ -691,7 +692,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.4. Update Note
 
-**Endpoint:** `PUT /api/v1/notes/:id`  
+**Endpoint:** `PUT /api/notes/:id`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user with edit permission
 
@@ -730,7 +731,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.5. Delete Note (Soft Delete - Move to Trash)
 
-**Endpoint:** `DELETE /api/v1/notes/:id`  
+**Endpoint:** `DELETE /api/notes/:id`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user with edit permission
 
@@ -748,7 +749,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.6. Get Trash (Soft-Deleted Notes)
 
-**Endpoint:** `GET /api/v1/notes/trash`  
+**Endpoint:** `GET /api/notes/trash`  
 **Authentication:** Required
 
 **Success Response (200):**
@@ -777,7 +778,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.7. Restore Note from Trash
 
-**Endpoint:** `POST /api/v1/notes/:id/restore`  
+**Endpoint:** `POST /api/notes/:id/restore`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -793,7 +794,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.8 Permanently Delete Note
 
-**Endpoint:** `DELETE /api/v1/notes/:id/permanent`  
+**Endpoint:** `DELETE /api/notes/:id/permanent`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -811,7 +812,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.9. Get Note Statistics
 
-**Endpoint:** `GET /api/v1/notes/stats`  
+**Endpoint:** `GET /api/notes/stats`  
 **Authentication:** Required  
 **Cache:** 5 minutes
 
@@ -836,7 +837,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.10. Get All Tags
 
-**Endpoint:** `GET /api/v1/notes/tags`  
+**Endpoint:** `GET /api/notes/tags`  
 **Authentication:** Required
 
 **Success Response (200):**
@@ -869,7 +870,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 
 ###### 2.11. Get Note Attachments
 
-**Endpoint:** `GET /api/v1/notes/:id/attachments`  
+**Endpoint:** `GET /api/notes/:id/attachments`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user
 
@@ -903,7 +904,7 @@ attachments: [file1.pdf, file2.jpg] (optional, max 5 files, 5MB each)
 **cURL Example:**
 
 ```bash
-curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
+curl -X GET http://localhost:3000/api/notes/1/attachments \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -911,7 +912,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 2.12. Download Attachment
 
-**Endpoint:** `GET /api/v1/notes/:id/attachments/:attachmentId/download`  
+**Endpoint:** `GET /api/notes/:id/attachments/:attachmentId/download`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user
 
@@ -922,7 +923,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 2.13. Delete Attachment
 
-**Endpoint:** `DELETE /api/v1/notes/:id/attachments/:attachmentId`  
+**Endpoint:** `DELETE /api/notes/:id/attachments/:attachmentId`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user with edit permission
 
@@ -944,7 +945,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 3.1. Get All Categories
 
-**Endpoint:** `GET /api/v1/categories`  
+**Endpoint:** `GET /api/categories`  
 **Authentication:** Required
 
 **Success Response (200):**
@@ -975,7 +976,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 3.2. Create Category
 
-**Endpoint:** `POST /api/v1/categories`  
+**Endpoint:** `POST /api/categories`  
 **Authentication:** Required
 
 **Request Body:**
@@ -1009,7 +1010,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 3.3. Update Category
 
-**Endpoint:** `PUT /api/v1/categories/:id`  
+**Endpoint:** `PUT /api/categories/:id`  
 **Authentication:** Required
 
 **Request Body:**
@@ -1037,7 +1038,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 3.4. Delete Category
 
-**Endpoint:** `DELETE /api/v1/categories/:id`  
+**Endpoint:** `DELETE /api/categories/:id`  
 **Authentication:** Required
 
 **Note:** Notes in this category will have `category_id` set to NULL
@@ -1060,7 +1061,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 4.1. Share Note with User
 
-**Endpoint:** `POST /api/v1/sharing/notes/:id/share`  
+**Endpoint:** `POST /api/sharing/notes/:id/share`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -1101,7 +1102,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 4.2. Get Users Note is Shared With
 
-**Endpoint:** `GET /api/v1/sharing/notes/:id/users`  
+**Endpoint:** `GET /api/sharing/notes/:id/users`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -1139,7 +1140,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 4.3. Get Notes Shared With Me
 
-**Endpoint:** `GET /api/v1/sharing/shared-with-me`  
+**Endpoint:** `GET /api/sharing/shared-with-me`  
 **Authentication:** Required
 
 **Success Response (200):**
@@ -1173,7 +1174,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 4.4. Revoke Share Access
 
-**Endpoint:** `DELETE /api/v1/sharing/:shareId`  
+**Endpoint:** `DELETE /api/sharing/:shareId`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -1192,7 +1193,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 5.1. Get All Templates
 
-**Endpoint:** `GET /api/v1/templates`  
+**Endpoint:** `GET /api/templates`  
 **Authentication:** Required
 
 **Response includes:**
@@ -1236,7 +1237,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 5.2. Create Template
 
-**Endpoint:** `POST /api/v1/templates`  
+**Endpoint:** `POST /api/templates`  
 **Authentication:** Required
 
 **Request Body:**
@@ -1282,7 +1283,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 5.3. Use Template (Create Note from Template)
 
-**Endpoint:** `POST /api/v1/templates/:templateId/use`  
+**Endpoint:** `POST /api/templates/:templateId/use`  
 **Authentication:** Required
 
 **Success Response (201):**
@@ -1307,7 +1308,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 5.4. Delete Template
 
-**Endpoint:** `DELETE /api/v1/templates/:templateId`  
+**Endpoint:** `DELETE /api/templates/:templateId`  
 **Authentication:** Required  
 **Permissions:** Owner only
 
@@ -1326,7 +1327,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 6.1. Export Single Note as PDF
 
-**Endpoint:** `GET /api/v1/export/notes/:id/pdf`  
+**Endpoint:** `GET /api/export/notes/:id/pdf`  
 **Authentication:** Required  
 **Permissions:** Owner or shared user
 
@@ -1344,7 +1345,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 6.2. Export All Notes as PDF
 
-**Endpoint:** `GET /api/v1/export/notes/pdf`  
+**Endpoint:** `GET /api/export/notes/pdf`  
 **Authentication:** Required
 
 **Response:** Combined PDF file with all notes
@@ -1359,7 +1360,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ##### 6.3. Export Notes as JSON
 
-**Endpoint:** `GET /api/v1/export/notes/json`  
+**Endpoint:** `GET /api/export/notes/json`  
 **Authentication:** Required
 
 **Response:** JSON file download
@@ -1393,7 +1394,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ###### 6.4. Export Notes as CSV
 
-**Endpoint:** `GET /api/v1/export/notes/csv`  
+**Endpoint:** `GET /api/export/notes/csv`  
 **Authentication:** Required
 
 **Response:** CSV file download
@@ -1412,7 +1413,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ##### 6.5. Import Notes from JSON
 
-**Endpoint:** `POST /api/v1/export/notes/import`  
+**Endpoint:** `POST /api/export/notes/import`  
 **Authentication:** Required  
 **Rate Limit:** 20 requests per hour
 
@@ -1492,7 +1493,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ##### 8.1. Generate Weekly Report (Admin)
 
-**Endpoint:** `GET /api/v1/admin/reports/weekly/:userId`  
+**Endpoint:** `GET /api/admin/reports/weekly/:userId`  
 **Authentication:** Required  
 **Permissions:** Admin only (scheduled)
 
@@ -1527,7 +1528,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 
 ##### 8.2. Generate Audit Log Report (Admin)
 
-**Endpoint:** `GET /api/v1/admin/reports/audit`  
+**Endpoint:** `GET /api/admin/reports/audit`  
 **Authentication:** Required  
 **Permissions:** Admin only
 
@@ -1541,7 +1542,7 @@ curl -X GET http://localhost:3000/api/v1/notes/1/attachments \
 **cURL Example:**
 
 ```bash
-curl -X GET "http://localhost:3000/api/v1/admin/reports/audit?startDate=2025-01-01&endDate=2025-01-31" \
+curl -X GET "http://localhost:3000/api/admin/reports/audit?startDate=2025-01-01&endDate=2025-01-31" \
   -H "Authorization: Bearer ADMIN_TOKEN" \
   -o audit_log.csv
 ```

@@ -16,13 +16,14 @@ exports.register = async (req, res, next) => {
     const { username, email, password } = req.body;
     const pool = await getPool();
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); // Salt Rounds ,  the hashing function will run the algorithm 2^{10} times (1024 rounds) to produce the final hash.
 
     const result = await pool
       .request()
       .input("username", sql.NVarChar, username)
       .input("email", sql.NVarChar, email)
-      .input("password", sql.NVarChar, hashedPassword).query(`
+      .input("password", sql.NVarChar, hashedPassword)
+      .query(`
         INSERT INTO Users (username, email, password)
         OUTPUT INSERTED.id, INSERTED.username, INSERTED.email, INSERTED.role, INSERTED.created_at
         VALUES (@username, @email, @password)
@@ -57,10 +58,10 @@ exports.login = async (req, res, next) => {
     const result = await pool
       .request()
       .input("email", sql.NVarChar, email)
-      .query("SELECT // FROM Users WHERE email = @email");
-
+      .query("SELECT * FROM Users WHERE email = @email");
+    
     const user = result.recordset[0];
-
+    
     if (!user) {
       return res.status(401).json({
         success: false,
